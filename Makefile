@@ -1,4 +1,4 @@
-CC	= ../bin/lcc -Wa-l -Wl-m -Wl-j
+CC	= lcc -Wa-l -Wl-m -Wl-j
 
 BINS	= bin/main.gb
 
