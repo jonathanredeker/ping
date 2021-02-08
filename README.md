@@ -7,7 +7,6 @@ Pong written in C for the Game Boy.
 <img src="https://i.postimg.cc/wBLb5GB0/ping.gif" alt="Ping" width="400"/>
 
 <br>
-<br>
 
 ## 📝&nbsp;&nbsp;&nbsp;To-do
 - [ ] Add a scoreboard
