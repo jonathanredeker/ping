@@ -4,8 +4,9 @@ Pong written in C for the Game Boy.
 
 <br>
 
-<img src="https://i.postimg.cc/4NkwHD0S/Screen-Shot-2021-02-04-at-8-04-11-PM.png" alt="Ping" width="400"/>
+<img src="https://i.postimg.cc/wBLb5GB0/ping.gif" alt="Ping" width="400"/>
 
+<br>
 <br>
 
 ## 📝&nbsp;&nbsp;&nbsp;To-do
