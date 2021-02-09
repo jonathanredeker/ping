@@ -11,7 +11,7 @@
 #include "include/tileset.c"
 #include "include/util.h"
 
-char debugBuffer[100];
+char debugBuffer[100]; // TEMP
  
 enum GameState {
     MENU,
@@ -21,22 +21,59 @@ enum GameState {
     LOSE
 };
 
-UBYTE gameState = MENU;
-
-void menu() {
+void menu(UBYTE* gameState) {
     UINT8 input = joypad();
     if (input == J_START) {
-        gameState = GAME;
+        *gameState = GAME;
     }
 }
 
-void pause() {
+void pause(UBYTE* gameState) {
     waitpad(J_START);
-    gameState = GAME;
+    *gameState = GAME;
     delay(100);
 }
 
-void game() {
+void game(BOOLEAN* gameInitialized, UBYTE* gameState) {
+    Paddle player;
+    Paddle opponent;
+    Ball ball;
+    
+    /* Initialize game objects once so as to maintain their states when 
+    switching game states */
+    if (!*gameInitialized) {
+        *gameInitialized = TRUE;
+
+        /* Compound literals require ISO C99 or later, so I need to use an 
+        initialization function to kick-start these game objects */
+        init_paddle(
+            &player,
+            1, 2, 3, // Sprite IDs
+            24, 80, // Position
+            1, // Velocity Y
+            8, 24, // True width and height
+            3, 24 // Collision width and height
+        );
+        init_paddle(
+            &opponent,
+            4, 5, 6, // Sprite IDs
+            144, 80, // Position
+            1, // Velocity Y
+            8, 24, // True width and height
+            3, 24 // Collision width and height
+        );
+        init_ball(
+            &ball,
+            0, // Sprite ID
+            BALL_DEFAULT_X, BALL_DEFAULT_Y, // Position
+            0, 0, // The ball's position in the last frame
+            -1, 0, // Velocity vector
+            8, 8, // True width and height
+            4, 4 // Collision width and height
+        );
+    
+    }
+
     // Always setup background
     set_bkg_tiles(0u, 0u, 20u, 18u, map);
 
@@ -70,6 +107,10 @@ void game() {
         if (input == J_DOWN && player.y < 124u) {
             player.vy += 2;
         }
+        if (input == J_A) {
+            *gameState = MENU;
+            break;
+        }
         player.y += player.vy;
         move_sprite(player.nb_top, player.x, player.y);
         move_sprite(player.nb_mid, player.x, player.y + 8u);
@@ -89,15 +130,24 @@ void game() {
         move_sprite(opponent.nb_bot, opponent.x, opponent.y + 16u);
         
         // Paddle and ball collision detection
-        if (ball.vx == -1 && get_ball_virtual_x(&ball) == player.x + player.w) {
-            if (ball.y + (ball.h / 2) > player.y && ball.y + (ball.h / 2) < player.y + player.h) {
+        if (ball.vx == -1 && 
+            get_ball_virtual_x(&ball) == player.x + player.w) 
+        {
+            if (ball.y + (ball.h / 2) > player.y && 
+                ball.y + (ball.h / 2) < player.y + player.h) 
+            {
                 ball.x = ball.last_x;
                 ball.x -= ball.vx;
                 ball.vx = 1;
             }
         }
-        if (ball.vx == 1 && get_ball_virtual_x(&ball) + ball.collision_w == opponent.x) {
-            if (ball.y + (ball.h / 2) > opponent.y && ball.y + (ball.h / 2) < opponent.y + opponent.h) {
+        if (ball.vx == 1 && 
+            get_ball_virtual_x(&ball) + ball.collision_w == opponent.x) 
+        {
+            if (
+                ball.y + (ball.h / 2) > opponent.y && 
+                ball.y + (ball.h / 2) < opponent.y + opponent.h) 
+            {
                 ball.x = ball.last_x;
                 ball.x -= ball.vx;
                 ball.vx = -1;
@@ -105,13 +155,17 @@ void game() {
         }
 
         // Bounds and ball collision detection
-        if (get_ball_virtual_y(&ball) <= bounds.y || get_ball_virtual_y(&ball) + ball.collision_h >= bounds.y + bounds.h) {
+        if (get_ball_virtual_y(&ball) <= bounds.y || 
+            get_ball_virtual_y(&ball) + ball.collision_h >= bounds.y + bounds.h) 
+        {
             ball.vy *= -1;
             // Undo last movement
             ball.y = ball.last_y;
             ball.y -= ball.vy;
         }
-        if (get_ball_virtual_x(&ball) <= bounds.x || get_ball_virtual_x(&ball) + ball.collision_w >= bounds.x + bounds.w) {
+        if (get_ball_virtual_x(&ball) <= bounds.x || 
+            get_ball_virtual_x(&ball) + ball.collision_w >= bounds.x + bounds.w) 
+        {
             ball.vx *= -1;
             // Goal
         }
@@ -129,6 +183,8 @@ void game() {
 }
 
 void main() {
+    UBYTE gameState = MENU;
+    BOOLEAN gameInitialized = 0u;
     set_bkg_data(0u, 30u, tileset);
     set_sprite_data(0u, 30u, tileset);
     SHOW_BKG;
@@ -137,13 +193,13 @@ void main() {
     while (TRUE) {
         switch (gameState) {
             case GAME:
-                game();
+                game(&gameInitialized, &gameState);
                 break;
             case MENU:
-                menu();
+                menu(&gameState);
                 break;
             case PAUSE:
-                pause();
+                pause(&gameState);
                 break;
             default:
                 break;
