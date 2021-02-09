@@ -9,8 +9,11 @@ Pong written in C for the Game Boy.
 <br>
 
 ## 📝&nbsp;&nbsp;&nbsp;To-do
+- [x] Add precise collisions for paddles, ball and bounds
+- [ ] Removed all of those pesky global variables
+- [ ] Add ability to hide sprites when changing game states (scenes)
 - [ ] Add a scoreboard
-- [ ] Create the screens: menu, pause, win and lose.
+- [ ] Create the scenes: menu, pause, win and lose.
 - [ ] Implement an AI that doesn't just mirror the ball's y-coordinate. (lol)
 
 <br>
