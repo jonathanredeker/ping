@@ -12,10 +12,20 @@ typedef struct {
     UINT8 w, h;
 } Ball;
 
+/** Gets a more accurate representation of of the Ball's x position.
+ * @param ball      The Ball to calculate the virtual x for.
+ * 
+ * @return          The virtual x position of the Ball.
+ */
 UINT8 get_ball_virtual_x(Ball* ball) {
     return ball->x + ((8 - ball->w) / 2);
 }
 
+/** Gets a more accurate representation of of the Ball's y position.
+ * @param ball      The Ball to calculate the virtual y for.
+ * 
+ * @return          The virtual y position of the Ball.
+ */
 UINT8 get_ball_virtual_y(Ball* ball) {
     return ball->y + ((8 - ball->h) / 2);
 }

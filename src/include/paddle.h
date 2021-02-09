@@ -11,11 +11,11 @@ typedef struct {
     UINT8 w, h;
 } Paddle;
 
-/**
- * @param paddle    The paddle struct to calculate the virtual x for.
- * @param flip      TRUE for the opponent's paddle and FALSE for the player's paddle.
+/** Gets a more accurate representation of of the Paddle's x position.
+ * @param paddle    The Paddle to calculate the virtual x for.
+ * @param flip      TRUE for the opponent's paddle and FALSE for the player's Paddle.
  * 
- * @return          The virtual x position of the paddle.
+ * @return          The virtual x position of the Paddle.
  */
 UINT8 get_paddle_virtual_x(Paddle* paddle, BOOLEAN flip) {
     if (flip) {
