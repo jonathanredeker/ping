@@ -6,10 +6,8 @@
 
 #define OFFSET_X 8
 #define OFFSET_Y 16
-#define BALL_DEFAULT_X 84
-#define BALL_DEFAULT_Y 92
 
-BOOLEAN colliding(
+BOOLEAN checkCollision(
     UINT8 x1, UINT8 y1, UINT8 w1, UINT8 h1,
     UINT8 x2, UINT8 y2, UINT8 w2, UINT8 h2
 ) {
