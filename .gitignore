@@ -3,3 +3,5 @@
 *.noi
 *.DS_Store
 *.old.c
+.vscode
+/tests
