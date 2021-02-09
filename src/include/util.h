@@ -7,16 +7,35 @@
 #define OFFSET_X 8
 #define OFFSET_Y 16
 
-BOOLEAN checkCollision(
-    UINT8 x1, UINT8 y1, UINT8 w1, UINT8 h1,
-    UINT8 x2, UINT8 y2, UINT8 w2, UINT8 h2
-) {
-    if (x1 + w1 >= x2 && x2 + w2 >= x1) {
-        if (y1 + h1 >= y2 && y2 + h2 >= y1) {
+enum GameState {
+    MENU,
+    GAME,
+    PAUSE,
+    WIN,
+    LOSE
+};
+
+/** Checks if there's  a collision between two bodies.
+ * 
+ * @param a_x           Body A's x position
+ * @param a_y           Body A's y position
+ * @param a_w           Body A's width
+ * @param a_h           Body A's height
+ * @param b_x           Body B's x position
+ * @param b_y           Body B's y position
+ * @param b_w           Body B's width
+ * @param b_h           Body B's height
+ * 
+ * @return TRUE if there's a collision; otherwise, return FALSE.
+ */
+BOOLEAN checkCollision(UINT8 a_x, UINT8 a_y, UINT8 a_w, UINT8 a_h,
+    UINT8 b_x, UINT8 b_y, UINT8 b_w, UINT8 b_h) 
+{
+    if (a_x + a_w >= b_x && b_x + b_w >= a_x) {
+        if (a_y + a_h >= b_y && b_y + b_h >= a_y) {
             return TRUE;
         }
     }
     return FALSE;
 }
-
 #endif // UTIL_H
