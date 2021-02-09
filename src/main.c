@@ -1,15 +1,14 @@
 // Native
-#include <types.h>
-#include <stdio.h>
-#include <gb/gb.h>
 #include <gb/bgb_emu.h>
-#include <gb/drawing.h>
+#include <gb/gb.h>
+#include <stdio.h>
+#include <types.h>
 // Local
-#include "include/tileset.c"
-#include "include/map.c"
-#include "include/paddle.h"
 #include "include/ball.h"
 #include "include/box.h"
+#include "include/map.c"
+#include "include/paddle.h"
+#include "include/tileset.c"
 #include "include/util.h"
 
 char debugBuffer[100];
@@ -88,26 +87,44 @@ void game() {
         move_sprite(opponent.nb_top, opponent.x, opponent.y);
         move_sprite(opponent.nb_mid, opponent.x, opponent.y + 8u);
         move_sprite(opponent.nb_bot, opponent.x, opponent.y + 16u);
-
-        // Paddle and ball collision detection
         
+        // Paddle and ball collision detection
+        if (ball.vx == -1 && get_ball_virtual_x(&ball) == player.x + player.w) {
+            if (ball.y + (ball.h / 2) > player.y && ball.y + (ball.h / 2) < player.y + player.h) {
+                ball.x = ball.last_x;
+                ball.x -= ball.vx;
+                ball.vx = 1;
+            }
+        }
+        if (ball.vx == 1 && get_ball_virtual_x(&ball) + ball.collision_w == opponent.x) {
+            if (ball.y + (ball.h / 2) > opponent.y && ball.y + (ball.h / 2) < opponent.y + opponent.h) {
+                ball.x = ball.last_x;
+                ball.x -= ball.vx;
+                ball.vx = -1;
+            }
+        }
 
         // Bounds and ball collision detection
-        if (get_ball_virtual_y(&ball) <= bounds.y || get_ball_virtual_y(&ball) + ball.h >= bounds.y + bounds.h) {
+        if (get_ball_virtual_y(&ball) <= bounds.y || get_ball_virtual_y(&ball) + ball.collision_h >= bounds.y + bounds.h) {
             ball.vy *= -1;
+            // Undo last movement
+            ball.y = ball.last_y;
+            ball.y -= ball.vy;
         }
-        if (get_ball_virtual_x(&ball) <= bounds.x || get_ball_virtual_x(&ball) + ball.w >= bounds.x + bounds.w) {
+        if (get_ball_virtual_x(&ball) <= bounds.x || get_ball_virtual_x(&ball) + ball.collision_w >= bounds.x + bounds.w) {
             ball.vx *= -1;
             // Goal
         }
 
+        ball.last_x = ball.x;
+        ball.last_y = ball.y;
         ball.x += ball.vx;
         ball.y += ball.vy;
         move_sprite(ball.nb, ball.x, ball.y);
 
         player.vy = 0;
         opponent.vy = 0;
-        delay(40);
+        delay(17);
     }
 }
 
