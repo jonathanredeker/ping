@@ -2,3 +2,4 @@
 *.map
 *.noi
 *.DS_Store
+*.old.c
