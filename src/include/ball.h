@@ -17,6 +17,26 @@ typedef struct {
     UINT8 collision_w, collision_h; // Collision width and height
 } Ball;
 
+/**
+ * 
+ */
+void init_ball(Ball* ball, UINT8 nb, UINT8 x, UINT8 y, UINT8 last_x, 
+    UINT8 last_y, INT8 vx, INT8 vy, UINT8 w, UINT8 h, UINT8 collision_w, 
+    UINT8 collision_h) 
+{
+    ball->nb = nb;
+    ball->x = x;
+    ball->y = y;
+    ball->last_x = last_x;
+    ball->last_y = last_y;
+    ball->vx = vx;
+    ball->vy = vy;
+    ball->w = w;
+    ball->h = h;
+    ball->collision_h = collision_h;
+    ball->collision_w = collision_w;
+}
+
 /** Gets a more accurate representation of of the Ball's x position.
  * @param ball      The Ball to calculate the virtual x for.
  * 
@@ -34,6 +54,7 @@ UINT8 get_ball_virtual_x(Ball* ball) {
 UINT8 get_ball_virtual_y(Ball* ball) {
     return ball->y + ((ball->h - ball->collision_h) / 2);
 }
+/* 
 
 Ball ball = {
     0, // Sprite ID
@@ -42,6 +63,6 @@ Ball ball = {
     -1, 0, // Velocity vector
     8, 8, // True width and height
     4, 4, // Collision width and height
-};
+}; */
 
 #endif // BALL_H
